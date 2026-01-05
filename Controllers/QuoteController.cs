@@ -54,5 +54,24 @@ namespace WebApplication1.Controllers
 
             return Ok(quote);
         }
+
+        [HttpGet("random")]
+        public async Task<IActionResult> GetRandomQuote()
+        {
+            var count = await _db.Quotes.CountAsync();
+
+            if (count == 0)
+            {
+                return NotFound("No quotes available.");
+            }
+
+            Random random = new Random();
+            int randomIndex = random.Next(0, count);
+
+            var randomQuote = await _db.Quotes.Skip(randomIndex)
+                .Take(1)
+                .FirstOrDefaultAsync();
+            return Ok(randomQuote);
+        }
     }
 }
