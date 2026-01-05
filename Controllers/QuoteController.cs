@@ -26,7 +26,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound("No quotes available.");
             }
-            return Ok(quotes); 
+            return Ok(quotes);
         }
 
         [HttpGet("category/{category}")]
@@ -37,8 +37,21 @@ namespace WebApplication1.Controllers
                 .ToListAsync();
 
             if (quote == null || !quote.Any())
-            {                 return NotFound($"No quotes found for category: {category}");
+            { return NotFound($"No quotes found for category: {category}");
             }
+            return Ok(quote);
+        }
+
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetQuoteById(int id)
+        {
+            var quote = await _db.Quotes.FindAsync(id);
+
+            if (quote == null)
+            {
+                return NotFound($"Quote with ID {id} not found.");
+            }
+
             return Ok(quote);
         }
     }
